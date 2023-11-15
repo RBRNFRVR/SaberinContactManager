@@ -1,0 +1,46 @@
+﻿@using System.Linq
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <!--Just add Header for the Primary Email-->
+            <th scope ="col">Primary Email</th>
+        </tr>
+    </thead>
+    <tbody class="hoverHighlightTable">
+        @foreach (var contact in Model.Contacts)
+        {
+            <tr>
+                <td class="editContact" data-id="@contact.Id">@contact.Title</td>
+                <td class="editContact" data-id="@contact.Id">@contact.FirstName</td>
+                <td class="editContact" data-id="@contact.Id">@contact.LastName</td>
+                <!--Spent two hours on this just to realize that the CONTROLLER get action was never recieving the email addresses from the database.-->
+                <td class="editContact" data-id="@contact.Id">
+                    @{
+                        string displayedEmail = null;
+                        foreach(var emailAddress in contact.EmailAddresses)
+                        {
+                            if (emailAddress.IsChecked)
+                            {
+                                displayedEmail = emailAddress.Email;
+                            }
+                        }
+
+                        if (displayedEmail == null)
+                        {
+                            displayedEmail = contact.EmailAddresses[0].Email;
+                        }
+                    }
+                    @displayedEmail
+                </td>
+                <td class="whiteBackground defaultCursor"><a class="redText float-right pointer deleteContact" title="Delete Contact" data-toggle="modal" data-target="#modal-delete" data-id="@contact.Id">X</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
